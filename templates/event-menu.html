@@ -1,0 +1,39 @@
+﻿<ion-header-bar id="appHeader" ng-class="onofflineclass" class="bar bar-header bar-light">
+	<div ng-model="showBackButton" ng-if="showBackButton !=''" >
+		<a ng-click="onBackPress()" class="button icon-left ion-chevron-left button-clear button-dark backIcon"></a>
+		<a href="#/event/home"  class="button icon-left icon icon ion-home button-clear button-dark homeIcon"></a>
+       
+	</div>
+    
+	
+	<h1 class="title pageTitle text-center"><img ng-bind="showLogo" ng-if="showLogo !=''" src="{{AppLogoImage}}" height="28" class="geLogo"  /><b ng-bind='app_page_title'></b><b ng-bind='app_page_title_subtitle'> </b></h1>    
+	<a ng-click="logout()" class="button icon-right ion-log-out button-clear button-dark logOutBtn" ng-if="!showTodayTaskIcon"></a>
+    <a class="button icon-right icon ion-clock button-clear button-dark logOutBtn" ng-click="filterTodayActivity()" ng-if="showTodayTaskIcon"></a>
+   
+</ion-header-bar>
+<ion-side-menus>
+	<ion-side-menu-content>
+		<ion-nav-bar class="bar-positive"animation="no-animation">
+			<ion-nav-back-button class="button-icon ion-arrow-left-c"></ion-nav-back-button>
+		</ion-nav-bar>
+		<ion-nav-view animation="no-animation" name="menuContent"></ion-nav-view>
+	</ion-side-menu-content>
+	<ion-side-menu side="none">
+		<ion-content>
+			<ul align="center" class="list homeMenuss"><!--#/event/createnew-->
+				<a href="#/event/visitdetailslisting" class="item" menu-close> <div class="iconHolder"><img src="img/new-ticket.png"  height="70" /></div> <h3>Visit Details</h3> </a>
+               <a href="#/event/installationlisting" class="item" menu-close> <div class="iconHolder"><img src="img/new-ticket.png"  height="70" /></div> <h3>Installation</h3> </a>
+               
+               <a href="#/event/amclisting" class="item" menu-close> <div class="iconHolder"><img src="img/new-ticket.png"  height="70" /></div> <h3>AMC</h3> </a>
+               
+               <a href="#/event/evvlisting" class="item" menu-close> <div class="iconHolder"><img src="img/new-ticket.png"  height="70" /></div> <h3>EVV</h3> </a>
+                <a href="#/event/custinfolist" class="item" menu-close> <div class="iconHolder"><img src="img/new-ticket.png"  height="70" /></div> <h3>Customer Information</h3> </a>
+                <a href="#/event/inventorylist" class="item" menu-close> <div class="iconHolder"><img src="img/new-ticket.png"  height="70" /></div> <h3>Temp Spare Inventory</h3> </a>
+                <a href="#/event/servicecontractlist" class="item" menu-close> <div class="iconHolder"><img src="img/new-ticket.png"  height="70" /></div> <h3>Service Contract</h3> </a>
+                <a href="#/event/settings" class="item" menu-close> <img src="img/setting.png"  height="70" /> <h3>Settings</h3> </a>
+
+               
+			</ul>
+		</ion-content>
+	</ion-side-menu>
+</ion-side-menus>

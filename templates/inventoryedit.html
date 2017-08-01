@@ -1,0 +1,115 @@
+﻿<ion-view>
+  <ion-content padding="true" delegate-handle="myScroll" has-header="true">
+    <div id="openTicketCheckPhone" class="show-for-small-down"></div>
+   
+      
+  
+      <div class="item removeanypadding">
+       
+        
+   
+        
+        <form name="myForm" class="form-horizontal" role="form" ng-submit="submitForm()">
+          <ng-form name="form">
+            <!-- TEXT FIELDS -->
+            <div class="list">
+              <div ng-repeat="field in records | orderBy:field_seq" >
+                <div ng-if="field.field_type=='acc_start' && field.field_Visible=='true'" class="item item-form-divider item-icon-right achierarHead" ng-click="section_click(field.field_tgtField)">
+                  <h2 class="topMargin7">{{field.field_lable}}</h2>
+                  <i class="icon ion-plus" ng-hide="{{field.field_tgtField}}"></i><i class="icon ion-minus" ng-show="{{field.field_tgtField}}"></i> 
+                  </div>
+                <!-- <div ng-repeat="group in groups" ng-if="field.field_type=='acc_start'">
+          <ion-item class="item-stable"
+                    ng-click="toggleGroup(group)"
+                    ng-class="{active: isGroupShown(group)}">
+              <i class="icon" ng-class="isGroupShown(group) ? 'ion-minus' : 'ion-plus'"></i>
+            &nbsp;
+            Group {{group.name}}
+          </ion-item>
+        </div>-->
+                <div ng-if="field.field_type=='Text' && field.field_Visible=='true'"  ng-show="{{field.acc_src}}">
+                  <div class="row">
+                    <div class="col">
+                      <label class="item item-input item-stacked-label"> <span class="input-label removeBoldFont">{{field.field_lable}}</span>
+                        <input type="{{ field.field_type }}" dynamic-name="field.field_lable" id="{{field.field_lable}}" data-ng-model="field.field_value" ng-disabled= "{{ field.field_readonly | lowercase }}" class="form-control"/>
+                        <!--<span ng-show="myForm.{{field.name}}.$dirty && myForm.{{field.name}}.$error.required">Required!</span>.-->
+                        <!-- <span  data-ng-show=" {{'form.'+field.name+'.$dirty && form.'+field.name+'.$error.required'}}">Required!</span> -->
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <!-- TEXTAREA FIELDS -->
+                <div ng-if="field.field_type=='Textarea'  && field.field_Visible=='true'" class="form-group"  ng-show="{{field.acc_src}}"> 
+                  <div class="row">
+                    <div class="col">
+                      <label class="item item-input item-stacked-label"> <span class="input-label removeBoldFont">{{field.field_lable}}</span>
+                        <textarea name="" dynamic-name="field.field_lable" id="{{field.field_lable}}" data-ng-model="field.field_value" ng-disabled= "{{ field.field_readonly | lowercase }}"  class="form-control"></textarea>
+                        <!--<span ng-show="myForm.{{field.name}}.$dirty && myForm.{{field.name}}.$error.required">Required!</span>.-->
+                        <!-- <span  data-ng-show=" {{'form.'+field.name+'.$dirty && form.'+field.name+'.$error.required'}}">Required!</span> -->
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <!-- DATE FIELDS -->
+                <div ng-if="field.field_type=='Date' && field.field_Visible=='true'" class="form-group"  ng-show="{{field.acc_src}}">
+                  <div class="row">
+                    <div class="col">
+                      <label class="item item-input item-stacked-label"> <span class="input-label removeBoldFont">{{field.field_lable}}</span>
+                        <input type="{{ field.field_type }}" dynamic-name="field.field_lable" id="{{field.field_lable}}" data-ng-model="field.field_value" ng-disabled= "{{ field.field_readonly | lowercase }}" class="form-control"/>
+                        <!--<input type="date" id="exampleInput" name="input" ng-model="dateDate"
+       placeholder="yyyy-MM-dd" min="2013-01-01" max="2013-12-31" required /> -->
+                        <!--<span ng-show="myForm.{{field.name}}.$dirty && myForm.{{field.name}}.$error.required">Required!</span>.-->
+                        <!-- <span  data-ng-show=" {{'form.'+field.name+'.$dirty && form.'+field.name+'.$error.required'}}">Required!</span> -->
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <!-- Telephone FIELDS -->
+                <div ng-if="field.field_type=='tel' && field.field_Visible=='true'" class="form-group"  ng-show="{{field.acc_src}}">
+                  <div class="row">
+                    <div class="col">
+                      <div class="list telephone"> <a class="item" ng-click="callDialer(field.field_value)"> {{field.field_lable}} <span><i class="icon ion-ios-telephone"></i> {{field.field_value}}</span> </a> </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <!--Choice Field -->
+               <!-- <div class="checkListBorder" ng-show="checklist"> -->
+       			 
+           <div ng-if="field.field_type=='choice' && field.field_Visible=='true'" class="form-group"  ng-show="{{field.acc_src}}">     
+              <div class="list">
+                <label class="item item-input item-select">
+                <div class="input-label">  <span style="width:20px; display:inline-block"><i class="icon ion-star errorAsterisk" ng-if="field.field_Mandatory == 'true'"></i> </span>{{field.field_lable}} </div>
+                <select dynamic-name="field.field_lable" id="{{field.field_lable}}" data-ng-model="field.field_value"  ng-options="option.field_lable as option.field_value for option in {{field.field_name}}">
+                  <option value="" selected>-- Select --</option>
+                </select>
+                </label>
+              </div>
+     	</div>
+          
+       <!-- </div> -->
+                <!--End of Choice -->
+                
+              </div>
+            </div>
+          </ng-form>
+          
+        </form>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>
+<!--<div class="tabs tabs-icon-top">
+  <a class="tab-item">
+    <i class="icon ion-home"></i>
+    Home
+  </a>
+  <a class="tab-item">
+    <i class="icon ion-star"></i>
+    Favorites
+  </a>
+  <a class="tab-item">
+    <i class="icon ion-gear-a"></i>
+    Settings
+  </a>
+</div>-->

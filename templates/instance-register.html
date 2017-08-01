@@ -1,0 +1,29 @@
+
+  <ion-content class="padding">
+   <div  align="center" style="margin-top:20px">
+			<h5>Enter Your Instance Name</h5>
+			<h5 class="pinErrorMsg" ng-bind="errorMsg" ng-if="errorMsg !=''"></h5>
+		</div>
+		<div class="pinLoginCon">
+			<div class="row padding">
+				<div class="col">
+					<label class="item item-input">
+						<input type="text" placeholder="Enter instance name" ng-model="$parent.passcode" style="padding-right:4px;" />
+                       
+					</label>
+                     <span style="font-size:11px; color:#666;  font-style: italic;">Note: start with https://, end with .com only</span>
+				</div>
+               
+
+			</div>
+			<div class="row">
+				<div class="col width80Per">
+					<button class="button button-full button-positive" ng-click="instanceSubmit()">
+						Submit
+					</button>
+				</div>
+			</div>
+		</div>
+    
+  </ion-content>
+

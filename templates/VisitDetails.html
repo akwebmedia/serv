@@ -1,0 +1,209 @@
+﻿<ion-view>
+  <ion-content padding="true" delegate-handle="myScroll" has-header="true">
+    <div id="openTicketCheckPhone" class="show-for-small-down"></div>
+    <div class="list">
+      <div style="text-align:right; padding:10px;">
+     
+        <button ng-click="SubmitFormData('Accept')" class="button button-positive " ng-if="currentFormStatus == 'New'">Accept </button>
+         <button ng-click="SubmitFormData('Approve')" class="button button-positive " ng-if="currentFormStatus == 'Pending Approval'">Approve </button>
+        <button ng-click="SubmitFormData('First Response')" class="button button-positive " ng-if="currentFormStatus == 'First Response'"> First Response </button>
+        <button ng-click="SubmitFormData('Start Travel(Forward)')" class="button button-positive " ng-if="currentFormStatus == 'Owner Assigned'"> Start Travel(Forward) </button>
+        <button ng-click="SubmitFormData('End Travel(Forward)')" class="button button-positive " ng-if="currentFormStatus == 'Start Travel Forward'"> End Travel(Forward) </button>
+        <button ng-click="SubmitFormData('Start Work')" class="button button-positive " ng-if="currentFormStatus == 'End Travel Forward'"> Start Work </button>
+        <button ng-click="SubmitFormData('End Work')" class="button button-positive " ng-if="currentFormStatus == 'Start Work'"> End Work </button>
+        <button ng-click="SubmitFormData('Start Travel(Back)')" class="button button-positive " ng-if="currentFormStatus == 'End Work'"> Start Travel(Back) </button>
+        <button ng-click="SubmitFormData('Completed')" class="button button-positive " ng-if="currentFormStatus == 'End Work'"> Completed </button>
+        <button ng-click="SubmitFormData('End Travel(Back)')" class="button button-positive " ng-if="currentFormStatus == 'Start Travel Back'"> End Travel(Back) </button>
+        <button ng-click="SubmitFormData('Suspend')" class="button button-positive " ng-if="currentFormStatus == 'End Travel Forward' || currentFormStatus == 'Start Work' || currentFormStatus == 'End Work'"> Suspend </button>
+      </div>
+      
+<!--      
+      	<button onclick="capturePhoto();">Capture Photo</button><br>
+<button onclick="getPhoto(pictureSource.PHOTOLIBRARY);">From Photo
+Library</button><br>
+<img id="image" src="" style="display:none;width:100%;">
+<button onclick="upload();">Upload</button> -->
+      
+      
+  
+      <div class="item removeanypadding">
+    
+        
+        
+
+        
+ <div style="border:10px solid #ccc" ng-if="showSpareParts">
+ <ion-item class="removeanypadding paddingTen" ng-repeat="f in toolsData"  ng-click="selectedTempData(f)">
+  <ul class="list">
+  	<li class="item" ng-repeat="d in f" ng-if="d.field_inList == 'true'">
+    	 <h3><b>{{d.field_lable}}: </b> {{d.field_value}}</h3>
+    </li>
+  </ul>
+							
+						</ion-item>
+ </div>
+ 
+
+
+   
+ 
+        <form name="myForm" class="form-horizontal" role="form" ng-submit="submitForm()">
+          <ng-form name="form">
+            <!-- TEXT FIELDS -->
+            <div class="list">
+              <div ng-repeat="field in records | orderBy:field_seq" >
+                <div ng-if="field.field_type=='acc_start' && field.field_Visible=='true'" class="item item-form-divider item-icon-right achierarHead" ng-click="section_click(field.field_tgtField)">
+                  <h2 class="topMargin7">{{field.field_lable}}</h2>
+                  <i class="icon ion-plus" ng-hide="{{field.field_tgtField}}"></i><i class="icon ion-minus" ng-show="{{field.field_tgtField}}"></i> 
+                  </div>
+                <!-- <div ng-repeat="group in groups" ng-if="field.field_type=='acc_start'">
+          <ion-item class="item-stable"
+                    ng-click="toggleGroup(group)"
+                    ng-class="{active: isGroupShown(group)}">
+              <i class="icon" ng-class="isGroupShown(group) ? 'ion-minus' : 'ion-plus'"></i>
+            &nbsp;
+            Group {{group.name}}
+          </ion-item>
+        </div>-->
+                <div ng-if="field.field_type=='Text' && field.field_Visible=='true' && field.field_refTable != 'cmdb_hardware_product_model'"  ng-show="{{field.acc_src}}">
+                  <div class="row">
+                    <div class="col">
+                      <label class="item item-input item-stacked-label"><i class="icon ion-star errorAsterisk" ng-if="field.field_Mandatory == 'false' || (field.field_name == 'u_comments_chk_std' && (chk_end_work == 'true' || chk_suspention == 'true'))"></i> <span class="input-label removeBoldFont">{{field.field_lable}}</span>
+                       
+                        <input type="{{ field.field_type }}" dynamic-name="field.field_lable" id="{{field.field_lable}}" data-ng-model="field.field_value" ng-disabled= "{{ field.field_readonly | lowercase }}" class="form-control" />
+                        <!--<span ng-show="myForm.{{field.name}}.$dirty && myForm.{{field.name}}.$error.required">Required!</span>.-->
+                        <!-- <span  data-ng-show=" {{'form.'+field.name+'.$dirty && form.'+field.name+'.$error.required'}}">Required!</span> -->
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                
+                <div ng-if="field.field_type=='REF' && field.field_Visible=='true'"  ng-show="{{field.acc_src}}"  ng-click="openSpareDetails(field.field_filter,field.field_name)">
+                  <div class="row">
+                    <div class="col">
+                      <label class="item item-input item-stacked-label"><i class="icon ion-star errorAsterisk" ng-if="field.field_Mandatory == 'false' || (field.field_name == 'u_comments_chk_std' && (chk_end_work == 'true' || chk_suspention == 'true'))"></i> <span class="input-label removeBoldFont">{{field.field_lable}}</span>
+                       <!-- <input type="{{ field.field_type }}" dynamic-name="field.field_lable" id="{{field.field_lable}}" data-ng-model="field.field_value" class="form-control" readonly="readonly" style="background:#FFF" /> --> 
+                        <br />
+                        {{field.field_value}}
+                        
+                        <input type="hidden" dynamic-name="field.field_lable" id="{{field.field_lable}}" data-ng-model="field.field_refID" />
+                        
+                        <!--<span ng-show="myForm.{{field.name}}.$dirty && myForm.{{field.name}}.$error.required">Required!</span>.-->
+                        <!-- <span  data-ng-show=" {{'form.'+field.name+'.$dirty && form.'+field.name+'.$error.required'}}">Required!</span> -->
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- TEXTAREA FIELDS -->
+                <div ng-if="field.field_type=='Textarea'  && field.field_Visible=='true'" class="form-group"  ng-show="{{field.acc_src}}"> 
+                  <div class="row">
+                    <div class="col">
+                      <label class="item item-input item-stacked-label"> <span class="input-label removeBoldFont">{{field.field_lable}}</span>
+                        <textarea name="" dynamic-name="field.field_lable" id="{{field.field_lable}}" data-ng-model="field.field_value" ng-disabled= "{{ field.field_readonly | lowercase }}"  class="form-control"></textarea>
+                        <!--<span ng-show="myForm.{{field.name}}.$dirty && myForm.{{field.name}}.$error.required">Required!</span>.-->
+                        <!-- <span  data-ng-show=" {{'form.'+field.name+'.$dirty && form.'+field.name+'.$error.required'}}">Required!</span> -->
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <!-- DATE FIELDS -->
+                <div ng-if="field.field_type=='Date' && field.field_Visible=='true'" class="form-group"  ng-show="{{field.acc_src}}">
+                  <div class="row">
+                    <div class="col">
+                      <label class="item item-input item-stacked-label"> <span class="input-label removeBoldFont">{{field.field_lable}}</span>
+                        <input type="{{ field.field_type }}" dynamic-name="field.field_lable" id="{{field.field_lable}}" data-ng-model="field.field_value" ng-disabled= "{{ field.field_readonly | lowercase }}" class="form-control"/>
+                        <!--<input type="date" id="exampleInput" name="input" ng-model="dateDate"
+       placeholder="yyyy-MM-dd" min="2013-01-01" max="2013-12-31" required /> -->
+                        <!--<span ng-show="myForm.{{field.name}}.$dirty && myForm.{{field.name}}.$error.required">Required!</span>.-->
+                        <!-- <span  data-ng-show=" {{'form.'+field.name+'.$dirty && form.'+field.name+'.$error.required'}}">Required!</span> -->
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <!-- Telephone FIELDS -->
+                <div ng-if="field.field_type=='tel' && field.field_Visible=='true'" class="form-group"  ng-show="{{field.acc_src}}">
+                  <div class="row">
+                    <div class="col">
+                      <div class="list telephone"> <a class="item" ng-click="callDialer(field.field_value)"> {{field.field_lable}} <span><i class="icon ion-ios-telephone"></i> {{field.field_value}}</span> </a> </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <!--Choice Field -->
+               <!-- <div class="checkListBorder" ng-show="checklist"> -->
+       			 
+           <div ng-if="field.field_type=='choice' && field.field_Visible=='true'" class="form-group"  ng-show="{{field.acc_src}}">     
+              <div class="list">
+                <label class="item item-input item-select">
+                <div class="input-label">  <span style="width:20px; display:inline-block"><i class="icon ion-star errorAsterisk" ng-if="field.field_Mandatory == 'true' || chk_end_work == 'true' || chk_suspention == 'true'"></i> </span>{{field.field_lable}} </div>
+                <select dynamic-name="field.field_lable" id="{{field.field_lable}}" data-ng-model="field.field_value"  ng-options="option.field_lable as option.field_value for option in {{field.field_name}}" ng-disabled= "{{ field.field_readonly | lowercase }}">
+                  <option value="" selected>-- Select --</option>
+                </select>
+                </label>
+              </div>
+     	</div>
+          
+       <!-- </div> -->
+                <!--End of Choice -->
+                
+                 <!-- Ref FIELDS ng-click="custSysId(field.field_refID)"-->
+                <div ng-if="field.field_name=='u_company' && field.field_Visible=='true'" class="form-group"  ng-show="{{field.acc_src}}">
+                  <div class="row">
+                    <div class="col">
+                      <div class="list refField"> <a class="item"  ng-click="openCustomerInformation(field.field_refID)" > {{field.field_lable}}<br /> <span> {{field.field_value}}<i class="icon ion-android-people"></i> </span> </a> </div>
+                    </div>
+                  </div>
+                </div>
+                
+                 <!-- Image Attachment List-->
+                <div ng-if="field.field_type=='attachment' && field.field_Visible=='true'" class="form-group"  ng-show="{{field.acc_src}}">
+                  <div class="row">
+                    <div class="col">
+                      <div class="list"> <a class="item"  ng-click="openAttachedImages(field.field_value)" > {{field.field_lable}} </a> </div>
+                    </div>
+                  </div>
+                </div>
+                
+                
+                
+              </div>
+            </div>
+          </ng-form>
+          <br/>
+          <br/>  <br/>
+        </form>
+      </div>
+    </div>
+    
+   <img id="image" src="new.jpg" style="display:block;width:100%;"><br />
+     	 
+  </ion-content>
+  
+  <div style="position: absolute; bottom: 0px; width: 100%">
+  
+    
+   
+        <div style="text-align: center">
+       <ion-tabs class="tabs-positive tabs-icon-top fixed fixed-bottom">
+       <a class="tab-item" onclick="capturePhoto();"><i class="icon ion-camera"></i>Camera</a>
+       <a class="tab-item" onclick="getPhoto(pictureSource.PHOTOLIBRARY);"><i class="icon ion-images"></i>Gallery</a>
+       <a class="tab-item" ng-click="openMap()"><i class="icon ion-map"></i>Map</a>
+      </ion-tabs> 
+    </div></div>
+  
+</ion-view>
+<!--<div class="tabs tabs-icon-top">
+  <a class="tab-item">
+    <i class="icon ion-home"></i>
+    Home
+  </a>
+  <a class="tab-item">
+    <i class="icon ion-star"></i>
+    Favorites
+  </a>
+  <a class="tab-item">
+    <i class="icon ion-gear-a"></i>
+    Settings
+  </a>
+</div>-->

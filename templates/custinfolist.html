@@ -1,0 +1,43 @@
+﻿<ion-view title="Testr" delegate-handle="myScroll" has-header="true">
+	<div id="openTicketCheckPhone" class="show-for-small-down"></div>
+
+
+<ion-tabs class="tabs-only tabs-top tabs-dark">
+		<ion-tab padding='true' title="">
+			<header class="bar bar-header bar-positive">
+				<h1 class="title"></h1>
+			</header>
+			<ion-content padding="true" has-header="true">
+				
+					 <div class="item item-input-inset">
+					<div class="item-input-wrapper">
+						<input type="search"
+						placeholder="Filter/Search items..."
+						ng-model="searchFilter"  ng-minlength="3" style="width:100%" />
+					</div>
+                 
+				</div>
+               
+               <ion-item class="item-icon-right" ng-repeat="f in filtered = (totalRecords | filter:searchFilter)" item="item"  ng-click="showDetails(f)">                               
+               <div ng-repeat="field in f" ng-if="field.field_inList == 'true'" >					
+                    <h3><b>{{field.field_lable}} </b> : {{field.field_value}}</h3>
+                    <span ng-if="field.field_name=='sys_id'">Sys ID = {{field.field_value}}</span>                   			
+					<i ng-if="!inneritem.isLetter" class="icon ion-chevron-right icon-accessory"></i>                   
+                    </div>                   
+				</ion-item>
+                <ion-item ng-if="(totalRecords.length == 0 || filtered.length == 0) && noTicketFlag">
+						<strong>No record found...</strong>
+					</ion-item>
+				</div>
+			</ion-content>
+		</ion-tab>
+		
+		
+		
+	</ion-tabs>
+
+    <!-- align to the bottom of the page -->
+    
+</ion-view>
+
+<!--   -->

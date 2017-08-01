@@ -1,0 +1,60 @@
+﻿<ion-view>
+	<ion-content padding="true" delegate-handle="myScroll" has-header="true">
+		<div id="openTicketCheckPhone" class="show-for-small-down"></div>
+		<form name="newticketform" id="newticketform" novalidate="novalidate" onkeypress="return event.keyCode != 13;" on-valid-submit="doLogin()" class="marginTop0">
+			<div class="list">
+				<div class="item item-form-divider item-icon-right" ng-init="show_section.customerinformation = true" ng-click="section_click('customerinformation')">
+					<h2>Customer Information</h2>
+					<i class="icon ion-ios7-plus-outline" ng-hide="show_section.customerinformation"></i><i class="icon ion-ios7-minus-outline" ng-show="show_section.customerinformation"></i>
+				</div>
+				<div ng-show="show_section.customerinformation" class="item removeanypadding">
+										<div class="row responsive-lg">
+						<div class="col">
+							<label class="item item-input item-select">
+								<div class="input-label">
+									Priority
+								</div>
+								<select data-ng-model='ticketform.u_priority'>
+									<option value="" selected>-- Select --</option>
+									<option>High</option>
+									<option>Low</option>
+									<option>Medium</option>
+								</select> </label>
+						</div>
+						<div class="col">
+							<label class="item item-input item-select">
+								<div class="input-label">
+									Status
+								</div>
+								<select data-ng-model='ticketform.u_status'>
+                                <option value="" selected>-- Select --</option>
+										<option>Open</option>
+								</select> </label>
+						</div>
+					</div>
+					<div class="row responsive-lg">
+						<div class="col">
+							<label ng-class="isInvalid('ticketform.u_short_description') ? 'has-error' : 'has-success'"  class="item item-input item-stacked-label"> <span class="input-label">Short Description</span> 						<textarea placeholder="Enter short description" data-ng-model='ticketform.u_short_description' id="ticket-shortdescription" maxlength="100" rows="4"  required> 
+							</textarea> </label>
+						</div>
+					</div>
+				</div>
+				<div class="sep"></div>
+                </div>
+                
+                <div class="margin30" align="center">
+				<div class="row">
+					<div class="col">
+						<button type="submit" ng-click="ticketSubmit()" class="button button-small button-positive button-same-size">
+							Open Ticket
+						</button>
+						<button ng-click="ticketCancel()" class="button button-small button-positive button-same-size">
+							Cancel
+						</button>
+					</div>
+				</div>
+			</div>
+                
+               		</form>
+	</ion-content>
+</ion-view>
