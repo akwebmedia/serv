@@ -8,14 +8,14 @@ angular.module('starter.controllers')
 	$scope.$parent.$parent.$parent.showLogo = '';
 	$scope.$parent.$parent.$parent.showTodayTaskIcon = false;
 	$rootScope.setupHttpAuthHeader();
-	$scope.records = '';
-	$scope.ServiceLineData = '';
+$scope.recordSys = '';
+
 
 	$scope.show_section = {};
-	$scope.records = ''
+	
 
 // Accordion Display
-$scope.section_click = function(section, $event) {
+$scope.section_click = function(section, $event) {	
 		$scope[section] = !$scope[section];
 		$ionicScrollDelegate.resize();
 };
@@ -46,51 +46,97 @@ $scope.backToTicketsListing = function() {
 
 // Get the selected record from local storage
 var selectedItem = $localstorage.get('SELECTED_ACCOUNT');
-	$scope.records = angular.fromJson(selectedItem);
-	console.log($scope.records)
- 
+	//$scope.records = angular.fromJson(selectedItem);
+	//console.log($scope.records)
+
+var selectedCustInfo = $localstorage.getWithOutEncryption('CUST-SYS-ID');
 
 
+$scope.fetchLineData = function(recordSys){
 
-// Create Contract Line data based on header sys id
-
-for(var i=0; i<$scope.records.length; i++){
-	if($scope.records[i].field_name == 'sys_id'){
-		var recordSys = $scope.records[i].field_value;
-		break; 
-	}	
+	console.log('sys ='+ $scope.recordSys)
+	try {
+	$scope.ServiceLineData = [];
+		//Utils.showPleaseWait(pleaseWait);
+		
+			database.getServiceContractLineData(function(result) {		
+				
+				var applicationAccess = result.rows.item(0);
+				
+					var serviceLineAll = angular.fromJson(applicationAccess.Data);
+					
+					for(var i = 0; i<serviceLineAll.length; i++){
+						for(var j = 0; j<serviceLineAll[i].length; j++){
+							
+							if(serviceLineAll[i][j].field_refID == recordSys){
+							
+          							 $scope.ServiceLineData.push(serviceLineAll[i]);
+      							 
+								
+								//console.log($scope.ServiceLineData);
+							}
+							
+						}
+					}
+					$scope.noTicketFlag = true;
+			Utils.hidePleaseWait();
+			});
+		} catch(e) {
+			Utils.hidePleaseWait();
+		}
 
 }
 
-console.log('sys ='+ recordSys)
 
-if(recordSys){
-	//console.log(selectedCustInfo);
+if(selectedCustInfo){
+	
 	try {
 		//Utils.showPleaseWait(pleaseWait);
-			database.getParticularServiceLineData(recordSys, function(result) {				
-				
+			database.getOneServiceContractHeaderData(selectedCustInfo, function(result) {		
+																				console.log(result);
 				if(result && result.rows.length>0){
 					var applicationAccess = result.rows.item(0);				
-					$scope.ServiceLineData = angular.fromJson(applicationAccess.Data);
-					console.log($scope.ServiceLineData)					
+					$scope.records = angular.fromJson(applicationAccess.Data);
+					console.log($scope.records)					
 						
 					Utils.hidePleaseWait();
+					
+					for(var i=0; i<$scope.records.length; i++){
+						if($scope.records[i].field_name == 'sys_id'){
+							$scope.recordSys = $scope.records[i].field_value;							
+							$scope.fetchLineData($scope.recordSys)
+							$scope.openFirstAccordion();
+							break; 
+						}	
+					
+					}
 					//$scope.openFirstAccordion();
-				
 				} else {
-					//Utils.showAlert("Customer record not found");		
-						//history.back();
+					Utils.showAlert("Contract record not found");		
+						history.back();
 				}
 			});
 		} catch(e) {
 			Utils.hidePleaseWait();
 		}
 } else {
-	//$scope.records = angular.fromJson(selectedItem);
+	$scope.records = angular.fromJson(selectedItem);
+	for(var i=0; i<$scope.records.length; i++){
+						if($scope.records[i].field_name == 'sys_id'){
+							$scope.recordSys = $scope.records[i].field_value;							
+							$scope.fetchLineData($scope.recordSys)
+							break; 
+						}	
+					
+	}
 }
 
-				
+
+
+// Create Contract Line data based on header sys id
+
+
+//console.log('sys ='+ recordSys)
 
 
 
@@ -108,6 +154,12 @@ $scope.openFirstAccordion = function(){
 			modelNew.assign($scope, true);
 			$ionicScrollDelegate.resize();
 			}, 400);
+}
+
+
+$scope.showDetails = function(data){
+		$localstorage.set('SELECTED_ACCOUNT_Line', angular.toJson(data));		
+		$state.go('eventmenu.contractlineedit');	
 }
 
 

@@ -376,7 +376,6 @@ var sysId = $localstorage.get('SN-USER-SYSID');
 // Saving Partial Data
 $scope.openCustomerInformation = function(custID){
 	$localstorage.setWithOutEncryption('CUST-SYS-ID', custID);	
-	alert(custID)
 	for(var i=0; i<$scope.records.length; i++){
 	if($scope.records[i].field_Visible=='true' && $scope.records[i].field_readonly=='false' ){		
 		var namee = $scope.records[i].field_name;		
@@ -429,6 +428,21 @@ $scope.openMap = function(){
 // Open Attached images
 $scope.openAttachedImages = function(data){
 	cordova.InAppBrowser.open($rootScope.baseAppURL + '/sys_attachment.do?sysparm_referring_url=tear_off&view=true&sys_id=' + data, '_blank', 'location=yes,toolbar=yes');		
+}
+
+// Open Contract Number
+$scope.openContract = function(data){
+	$localstorage.setWithOutEncryption('CUST-SYS-ID', data);	
+		for(var i=0; i<$scope.records.length; i++){
+		if($scope.records[i].field_Visible=='true' && $scope.records[i].field_readonly=='false' ){		
+			var namee = $scope.records[i].field_name;		
+			$scope.partialform[namee] = $scope.records[i].field_value;		
+		} 
+	}
+	
+	$localstorage.setWithOutEncryption('PARTIAL_TICKET_DATA', JSON.stringify($scope.partialform));
+	
+	$state.go('eventmenu.servicecontractedit');
 }
 
 
@@ -547,13 +561,21 @@ $scope.uploadImage = function() {
 						var ticketSysId = $scope.records[i].field_value;
 					} 
 		}
+			var d = new Date(); // for now
+			datetext = d.getHours()+"-"+d.getMinutes()+"-"+d.getSeconds();
 			var allowedExtension = ['jpeg', 'jpg', 'gif', 'png'];
 			var fileExtension = document.getElementById('image').src.split('.').pop().toLowerCase();
 			var imgPath = document.getElementById('image').src;
 			var imgUrlPos = imgPath.lastIndexOf('/') + 1;
-			var imgUrl = imgPath.lastIndexOf(".");
-			var attachmentName = imgPath.slice(imgUrlPos, imgUrl);
-
+			var imgUrl = imgPath.lastIndexOf(".");			
+			
+			var cameraImg = document.getElementById('image');
+			if(cameraImg.alt){
+				var attachmentName = cameraImg.alt+'-'+datetext;
+			} else {
+				var attachmentName = imgPath.slice(imgUrlPos, imgUrl); //for Gallery
+			}
+			
 			//	alert(fileExtension)
 			var isValidFile = false;
 			for (var index in allowedExtension) {
@@ -577,12 +599,12 @@ $scope.uploadImage = function() {
 
 					$http({
 						method : 'POST',
-						url : $rootScope.baseAppURL + '/ecc_queue.do?JSON&sysparm_action=insert',
+						url : $rootScope.baseAppURL + '/api/inmpl/inm_mobile_application/inm_app_attachment_creator',
 						data : {
-							'agent' : "AttachmentCreator",
-							'topic' : "AttachmentCreator",
-							'name' : attachmentName + "." + imgType + ":image/" + imgType,
-							'source' : "u_avery_workreq_task:" + ticketSysId,
+							'tableName' : "u_avery_workreq_task",
+							'recordSysId' : ticketSysId,
+							'fileName' : attachmentName + '.' + imgType,
+							'contentType' : "image/x-"+imgType,
 							'payload' : $scope.afterDot,
 						},
 						headers : {
@@ -590,9 +612,9 @@ $scope.uploadImage = function() {
 							'Accept' : 'application/json',
 						},
 					}).success(function(record, status, headers, config) {
-						if (record) {
+						if (status == 200) {
 							//console.log(record && record.records && record.records[0] && record.records[0].__status && record.records[0].__status == 'success')
-							Utils.showAlert('Image has been uploaded successfully');
+							//Utils.showAlert('Image has been uploaded successfully');
 							Utils.hidePleaseWait();
 							$scope.backToTicketsListing();
 						}

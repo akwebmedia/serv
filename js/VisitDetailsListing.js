@@ -25,8 +25,7 @@ $scope.backToTicketsListing = function() {
 
 $scope.showDetails = function(data){
 		$localstorage.set('SELECTED_ACCOUNT', angular.toJson(data));		
-		$state.go('eventmenu.visitdetailsedit');
-	
+		$state.go('eventmenu.visitdetailsedit');	
 }
 
 

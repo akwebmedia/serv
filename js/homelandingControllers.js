@@ -364,7 +364,7 @@ setTimeout(function() {
 		} catch(e) {
 		}
 	}
-}, 1000);	
+}, 500);	
 	$scope.woDetailsPage = function(details, type) {
 		$localstorage.set('TICKET_EDIT_MODE', angular.toJson(details));
 		$localstorage.set('TICKET_TYPE', angular.toJson(type));

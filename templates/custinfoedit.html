@@ -80,7 +80,7 @@
               <div class="list">
                 <label class="item item-input item-select">
                 <div class="input-label">  <span style="width:20px; display:inline-block"><i class="icon ion-star errorAsterisk" ng-if="field.field_Mandatory == 'true'"></i> </span>{{field.field_lable}} </div>
-                <select dynamic-name="field.field_lable" id="{{field.field_lable}}" data-ng-model="field.field_value"  ng-options="option.field_lable as option.field_value for option in {{field.field_name}}">
+                <select dynamic-name="field.field_lable" id="{{field.field_lable}}" data-ng-model="field.field_value"  ng-options="option.field_value as option.field_lable for option in {{field.field_name}}">
                   <option value="" selected>-- Select --</option>
                 </select>
                 </label>

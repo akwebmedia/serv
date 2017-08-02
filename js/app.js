@@ -227,6 +227,16 @@ $ionicConfigProvider.tabs.position('bottom'); //bottom
 			}
 		}
 	})
+	.state('eventmenu.contractlineedit', {
+		url : "/contractlineedit",
+		cache: 'false',
+		views : {
+			'menuContent' : {
+				templateUrl : "templates/contractlineedit.html",
+				controller : 'ContractLineEditCtrl'
+			}
+		}
+	})
 	.state('eventmenu.customerlocation', {
 		url : "/customerlocation",
 		cache: 'false',

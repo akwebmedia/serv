@@ -65,7 +65,7 @@ Library</button><br>
             Group {{group.name}}
           </ion-item>
         </div>-->
-                <div ng-if="field.field_type=='Text' && field.field_Visible=='true' && field.field_refTable != 'cmdb_hardware_product_model'"  ng-show="{{field.acc_src}}">
+                <div ng-if="field.field_type=='Text' && field.field_Visible=='true' && field.field_refTable != 'u_avery_service_contract'"  ng-show="{{field.acc_src}}">
                   <div class="row">
                     <div class="col">
                       <label class="item item-input item-stacked-label"><i class="icon ion-star errorAsterisk" ng-if="field.field_Mandatory == 'false' || (field.field_name == 'u_comments_chk_std' && (chk_end_work == 'true' || chk_suspention == 'true'))"></i> <span class="input-label removeBoldFont">{{field.field_lable}}</span>
@@ -78,6 +78,22 @@ Library</button><br>
                   </div>
                 </div>
                 
+                <!--For Contract Number -->
+                <div ng-if="field.field_refTable=='u_avery_service_contract'" ng-show="{{field.acc_src}}">
+                  <div class="row">
+                    <div class="col">
+                      <label class="item item-input item-stacked-label"><i class="icon ion-star errorAsterisk" ng-if="field.field_Mandatory == 'false' || (field.field_name == 'u_comments_chk_std' && (chk_end_work == 'true' || chk_suspention == 'true'))"></i> <span class="input-label removeBoldFont">{{field.field_lable}}</span>
+                       
+                        <input type="{{ field.field_type }}" dynamic-name="field.field_lable" id="{{field.field_lable}}" data-ng-model="field.field_value" readonly="readonly" class="form-control" style="background:#FFF" ng-click="openContract(field.field_refID)" />
+                        <!--<span ng-show="myForm.{{field.name}}.$dirty && myForm.{{field.name}}.$error.required">Required!</span>.-->
+                        <!-- <span  data-ng-show=" {{'form.'+field.name+'.$dirty && form.'+field.name+'.$error.required'}}">Required!</span> -->
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                
+                
+                <!--For Carrying Spare PArts -->
                 <div ng-if="field.field_type=='REF' && field.field_Visible=='true'"  ng-show="{{field.acc_src}}"  ng-click="openSpareDetails(field.field_filter,field.field_name)">
                   <div class="row">
                     <div class="col">
@@ -136,8 +152,8 @@ Library</button><br>
            <div ng-if="field.field_type=='choice' && field.field_Visible=='true'" class="form-group"  ng-show="{{field.acc_src}}">     
               <div class="list">
                 <label class="item item-input item-select">
-                <div class="input-label">  <span style="width:20px; display:inline-block"><i class="icon ion-star errorAsterisk" ng-if="field.field_Mandatory == 'true' || chk_end_work == 'true' || chk_suspention == 'true'"></i> </span>{{field.field_lable}} </div>
-                <select dynamic-name="field.field_lable" id="{{field.field_lable}}" data-ng-model="field.field_value"  ng-options="option.field_lable as option.field_value for option in {{field.field_name}}" ng-disabled= "{{ field.field_readonly | lowercase }}">
+                <div class="input-label">  <span style="width:20px; display:inline-block" ng-if="field.field_Mandatory == 'true' || chk_end_work == 'true' || chk_suspention == 'true'"><i class="icon ion-star errorAsterisk"></i> </span>{{field.field_lable}} </div>
+                <select dynamic-name="field.field_lable" id="{{field.field_lable}}" data-ng-model="field.field_value"  ng-options="option.field_value as option.field_lable for option in {{field.field_name}}" ng-disabled= "{{ field.field_readonly | lowercase }}">
                   <option value="" selected>-- Select --</option>
                 </select>
                 </label>
@@ -176,7 +192,7 @@ Library</button><br>
       </div>
     </div>
     
-   <img id="image" src="new.jpg" style="display:block;width:100%;"><br />
+   <img id="image" src="" alt="" style="display:none;width:100%;"><br />
      	 
   </ion-content>
   
@@ -186,7 +202,9 @@ Library</button><br>
    
         <div style="text-align: center">
        <ion-tabs class="tabs-positive tabs-icon-top fixed fixed-bottom">
-       <a class="tab-item" onclick="capturePhoto();"><i class="icon ion-camera"></i>Camera</a>
+       <a class="tab-item" onclick="capturePhoto('img');"><i class="icon ion-camera"></i>Camera</a>
+       <a class="tab-item" onclick="capturePhoto('mom');"><i class="icon ion-camera"></i>MOM</a>
+       <a class="tab-item" onclick="capturePhoto('site');"><i class="icon ion-camera"></i>Site Picture</a>
        <a class="tab-item" onclick="getPhoto(pictureSource.PHOTOLIBRARY);"><i class="icon ion-images"></i>Gallery</a>
        <a class="tab-item" ng-click="openMap()"><i class="icon ion-map"></i>Map</a>
       </ion-tabs> 

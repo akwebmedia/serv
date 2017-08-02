@@ -45,6 +45,7 @@ var acceptanceDate = "Please select the acceptance date";
 
 var pictureSource; // picture source
 var destinationType; // sets the format of returned value
+var attachmentType;
 // Wait for device API libraries to load
 //
 document.addEventListener("deviceready", onDeviceReady, false);
@@ -72,6 +73,7 @@ function onPhotoDataSuccess(imageURI) {
     // The inline CSS rules are used to resize the image
     //
     cameraImage.src = imageURI;
+	cameraImage.alt = attachmentType;
 }
 // Called when a photo is successfully retrieved
 //
@@ -94,7 +96,8 @@ function onPhotoURISuccess(imageURI) {
 // A button will call this function
 //
 
-function capturePhoto() {
+function capturePhoto(typ) {
+	attachmentType = typ;
 	//alert('camera')
     // Take picture using device camera and retrieve image as base64-encoded string
     navigator.camera.getPicture(onPhotoDataSuccess, onFail, {
@@ -102,7 +105,7 @@ function capturePhoto() {
         targetWidth: 600,
         targetHeight: 600,
         destinationType: destinationType.FILE_URI,
-        saveToPhotoAlbum: true
+        saveToPhotoAlbum: false
     });
 }
 // A button will call this function

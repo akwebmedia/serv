@@ -214,7 +214,7 @@ return {
 		 */
 		createDbAndTables : function() {
 			if (desktopVersion) {
-				$rootScope.db = openDatabase('myClientDB127', '1.0', 'Mobile Client DB', 2 * 1024 * 1024);
+				$rootScope.db = openDatabase('myClientDB128', '1.0', 'Mobile Client DB', 2 * 1024 * 1024);
 			} else {
 				$rootScope.db = window.sqlitePlugin.openDatabase({name: 'myClientDB123.db', location: 'default'});
 				
@@ -232,7 +232,7 @@ return {
 				tx.executeSql('CREATE TABLE IF NOT EXISTS TempSpareInvntry (SysId text primary key, Data clob)');
 				tx.executeSql('CREATE TABLE IF NOT EXISTS SpareTools (SysId text primary key, Data clob)');
 				tx.executeSql('CREATE TABLE IF NOT EXISTS ServiceHdr (SysId text primary key, Data clob)');
-				tx.executeSql('CREATE TABLE IF NOT EXISTS ServiceLine (RefId text primary key, Data clob)');				
+				tx.executeSql('CREATE TABLE IF NOT EXISTS ServiceLine (Data clob)');				
 				tx.executeSql('CREATE TABLE IF NOT EXISTS pendingTickets (TicketId text primary key, UserId text, Type text, SysUpdatedOn datetime,TicketInfo clob)');
 				
 			});			
@@ -609,34 +609,37 @@ return {
 			});
 		},
 		
+		getOneServiceContractHeaderData : function(sysid, callback) {
+			
+			$rootScope.db.transaction(function(tx) {				
+				tx.executeSql('SELECT * FROM ServiceHdr WHERE SysId=?', [sysid], function(tx, results) {
+					if (results && results.rows && results.rows.length > 0) {
+						callback(results);
+					} else {
+						callback(null);
+					}
+				});
+			});
+		},
 		
 		/**
 		 * Store Service Contract Line data
 		 */
 		storeServiceContractLineData : function(data, callback) {			
 			$rootScope.db.transaction(function(tx) {
-										
-					var iIndex = 0;
-					for (var i = 0; i < data.length; i++) {
-						for(var j=0; j<data[i].length; j++){
-						if (data[j] && data[i][j].field_lable=='Customer Contract') {												
-							tx.executeSql('INSERT or REPLACE INTO ServiceLine (RefId,Data) VALUES(?,?)', [data[i][j].field_refID, JSON.stringify(data[i])], function(tx, res) {
-								iIndex++;
-								if (iIndex == data.length) {
-									callback(true, "");
-								}
-																																																																								  							});
-						}
+				tx.executeSql('INSERT or REPLACE INTO ServiceLine (Data) VALUES (?)', [JSON.stringify(data)], function(tx, res) {
+					if (res && res.rowsAffected && res.rowsAffected == 1) {	
+						callback(true);
+					} else {					
+						callback(false);
 					}
-					}						   
-				
+				});
 			});
 		},
 		
 		deleteServiceContractLineData : function(callback) {			
 			$rootScope.db.transaction(function(tx) {
-				tx.executeSql('DELETE FROM ServiceLine', [], function(tx, res) {
-					
+				tx.executeSql('DELETE FROM ServiceLine', [], function(tx, res) {					
 					if (res && res.rowsAffected && res.rowsAffected == 1) {
 						callback(true);
 					} else {
@@ -645,10 +648,10 @@ return {
 				});
 			});
 		},
-		getServiceContractLineData : function(callback) {
+		getServiceContractLineData : function(callback) {			
 			$rootScope.db.transaction(function(tx) {
-				tx.executeSql('SELECT Data FROM ServiceLine', [], function(tx, results) {
-					if (results && results.rows && results.rows.length > 0) {
+				tx.executeSql('SELECT * FROM ServiceLine', [], function(tx, results) {
+					if (results && results.rows && results.rows.length > 0) {						
 						callback(results);
 					} else {
 						callback(null);
@@ -657,17 +660,6 @@ return {
 			});
 		},
 		
-		getParticularServiceLineData : function(recId, callback) {			
-			$rootScope.db.transaction(function(tx) {				
-				tx.executeSql('SELECT * FROM ServiceLine WHERE RefId=?', [recId], function(tx, results) {
-					if (results && results.rows && results.rows.length > 0) {
-						callback(results);
-					} else {
-						callback(null);
-					}
-				});
-			});
-		},
 		
 		
 		storePendingTicket : function(ticketId, userId, type, sysUpdatedOn, ticketInfo, callback) {
